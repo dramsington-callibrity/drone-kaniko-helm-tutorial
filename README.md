@@ -27,7 +27,8 @@ If you don't get the exact string you typed in, you'll get something back that's
 ```shell
 export GCP_PROJECT_ID=$(gcloud config list --format 'value(core.project)' 2>/dev/null)
 ```
-Before you go creating any Kubernetes clusters, it's likely that you'll need to have the API enabled. [Go ahead and do that now](https://console.cloud.google.com/apis/api/container.googleapis.com/overview) 
+Before you go creating any Kubernetes clusters, it's likely that you'll need to have the API enabled. [Go ahead and do that now](https://console.cloud.google.com/apis/api/container.googleapis.com/overview) --it may prompt you to enter billing information. (just remember the $300 credit is still active if you click that button at the top)
+![Google Cloud Platform: Kubernetes API page](https://raw.githubusercontent.com/dramsington-callibrity/drone-kaniko-helm-tutorial/master/screenshots/Kubernetes-API-Enable.png)
 Next, you'll need to [select a zone](https://cloud.google.com/compute/docs/regions-zones/#available) and create your cluster. Before we do that, it's nice to know about what context you're currently in. If you've dabbled with Kubernetes there's a decent chance your context is Minikube:
 ```shell
 kubectl config current-context
@@ -82,6 +83,8 @@ Time to get some OAuth going. Also, a place to put our code. Continuous Integrat
 Go [here](https://github.com/settings/developers), and click `Register a New Application`
 Fill out the form like below, submit it and keep this tab open. We'll come back to it once our stack is up and running. Copy down the Client ID and the Client Secret as you will be needing them for the next part.
 
+![GitHub OAuth Application registration form](https://raw.githubusercontent.com/dramsington-callibrity/drone-kaniko-helm-tutorial/master/screenshots/GitHub-OAuth.png)
+
 ```shell
 kubectl create secret generic drone-server-secrets \
   --namespace=default \
@@ -111,7 +114,7 @@ env:
   DRONE_GITHUB_CLIENT: "<github-oauth-client-id>"
 ```
 Enter in the GitHub OAuth Client ID and save the file. Optionally, uncomment and enter in any GitHub Organizations that apply. You might notice that `DRONE_HOST` is commented out. We'll see to that once we have an external IP.
->**DISCLAIMER**: You should really endeavour to put this cluster behind a firewall and not expose it to the open internet unless you're going to secure it with a SSL cert. There are ways to do this but it is outside the scope of this tutorial.
+>**DISCLAIMER**: You should really endeavor to put this cluster behind a firewall and not expose it to the open internet unless you're going to secure it with a SSL cert. There are ways to do this but it is outside the scope of this tutorial.
 
 To deploy Drone, simply:
 ```shell
@@ -135,6 +138,8 @@ helm upgrade $CLUSTER_NAME-release \
  As you can see, you can upgrade a deployment with Helm pretty easily. You can start with your `values.yaml` and override it with `--set`. Before running the above, enter the IP but don't enter in a trailing slash, Drone will complain at you.
  
  Go visit the IP address in your browser. Once you see the prompt to login and GitHub asks for your permission, you should be presented with the Repositories page. 
+ 
+![Sample Drone Repositories page](https://raw.githubusercontent.com/dramsington-callibrity/drone-kaniko-helm-tutorial/master/screenshots/Drone-Repository-View.png)
 
 From here, navigate to: `/account/token`
  You shoud see something like this for you to copy down and run in your command prompt:
