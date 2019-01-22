@@ -96,7 +96,7 @@ The above will create a secret in the Kubernetes cluster that we can access in o
 
 A `Chart.yaml` is the file that describes the whole deployable stack. The `templates` directory has all the disparate Kubernetes files with template tags for conditional variables and more. The final piece is the `values.yaml`. You can see what's out there by looking at the [stable](https://github.com/helm/charts/tree/master/stable) directory on GitHub.
 
-The `values.yaml` is particularly important here. I made an altered copy of the drone values file [here](http://www.google.com) that you should download and use for the initial deployment. Make another copy called `my-values.yaml` that you can override with your own values.
+The `values.yaml` is particularly important here. I made an altered copy of the drone values file [here](https://raw.githubusercontent.com/dramsington-callibrity/drone-kaniko-helm-tutorial/master/helm/values.yaml) that you should download and use for the initial deployment. Make another copy called `my-values.yaml` that you can override with your own values.
 
 Edit the file where the following appears:
 ```yaml
