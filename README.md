@@ -1,5 +1,5 @@
 # Building containers with Drone and Kaniko
-Since Docker began to gain popularity a few years ago, it has been struggle to create containers in containers themselves. The most widely used method of employing docker-in-docker has a troublesome quirk: you have to directly mount the docker unix socket to the building container which runs the risk of sending arbitrary commands to the host docker daemon. Google's solution to this problem is [Kaniko](https://github.com/GoogleContainerTools/kaniko). The [kaniko-executor](https://console.cloud.google.com/gcr/images/kaniko-project/GLOBAL/executor?gcrImageListsize=30) image is a standalone container that offers advanced features such as caching and automatically pushing the image to a registry on successful build. Best yet, it can be configured to do so without touching the host machine.
+Ever since Docker began to gain popularity a few years ago, it has been struggle to create containers inside containers themselves. The most widely used method of employing docker-in-docker has a troublesome quirk: you have to directly mount the docker unix socket to the building container which runs the risk of sending arbitrary commands to the host docker daemon. Google's solution to this problem is [Kaniko](https://github.com/GoogleContainerTools/kaniko). The [kaniko-executor](https://console.cloud.google.com/gcr/images/kaniko-project/GLOBAL/executor?gcrImageListsize=30) image is a standalone container that offers advanced features such as caching and automatically pushing the image to a registry on successful build. Best yet, it can be configured to do so without touching the host machine.
 
 The second piece of this tutorial is to take the image builder and put it in a continuous-integration pipeline. A number of tools have paved the way for this and some represent a significant investment. [Drone](https://drone.io/) is a startup friendly (read: cheap) alternative to building apps the scalable way. So let's put the two together shall we?
 
@@ -48,7 +48,7 @@ gcloud container clusters get-credentials $CLUSTER_NAME
 ```
 The last command there sets your kubectl context to this new cluster and retrieves your credentials for future use.
 
-Now for the fun part. Have you heard of [Helm](https://helm.sh/)? It's magical let me tell you. The self-named Kubernetes package manager is a tool that allows you to find, use and create repeatable deployable clusters and pods. In this case, we're going to use Helm to install our Drone stack.
+Now for the fun part. Have you heard of [Helm](https://helm.sh/)? It's magical, let me tell you. The self-named Kubernetes package manager is a tool that allows you to find, use and create repeatable deployable clusters and pods. In this case, we're going to use Helm to install our Drone stack.
 
 To set up helm on our cluster securely let's initialize a RoleBinding to give to our service-account. Copy the following into a `rbac.yml` :
 ```yaml
@@ -91,8 +91,8 @@ Fill out the form like below, submit it and keep this tab open. We'll come back 
 kubectl create secret generic drone-server-secrets \
   --namespace=default \
   --from-literal=DRONE_GITHUB_SECRET="<github-oauth2-client-secret>"
-  ```
-  The above will create a secret in the Kubernetes cluster that we can access in our Helm *Chart*. 
+```
+The above will create a secret in the Kubernetes cluster that we can access in our Helm *Chart*. 
 
 A `Chart.yaml` is the file that describes the whole deployable stack. The `templates` directory has all the disparate Kubernetes files with template tags for conditional variables and more. The final piece is the `values.yaml`. You can see what's out there by looking at the [stable](https://github.com/helm/charts/tree/master/stable) directory on GitHub.
 
@@ -136,16 +136,16 @@ helm upgrade $CLUSTER_NAME-release \
   -f my-values.yaml \
   --set 'server.env.DRONE_HOST=http://<ip-of-load-balancer>' \
   stable/drone
-  ```
- As you can see, you can upgrade a deployment with Helm pretty easily. You can start with your `values.yaml` and override it with `--set`. Before running the above, enter the IP but don't enter in a trailing slash, Drone will complain at you.
+```
+As you can see, you can upgrade a deployment with Helm pretty easily. You can start with your `values.yaml` and override it with `--set`. Before running the above, enter the IP but don't enter in a trailing slash, Drone will complain at you.
  
- Go visit the IP address in your browser. Once you see the prompt to login and GitHub asks for your permission, you should be presented with the Repositories page. 
+Go visit the IP address in your browser. Once you see the prompt to login and GitHub asks for your permission, you should be presented with the Repositories page. 
  
 ![Sample Drone Repositories page](https://raw.githubusercontent.com/dramsington-callibrity/drone-kaniko-helm-tutorial/master/screenshots/Drone-Repository-View.png)
 
 From here, navigate to: `/account/token`
- You shoud see something like this for you to copy down and run in your command prompt:
- ```shell
+You shoud see something like this for you to copy down and run in your command prompt:
+```shell
 export DRONE_SERVER=http://<ip-of-load-balancer>
 export DRONE_TOKEN=<drone-generated-token>
 drone info
