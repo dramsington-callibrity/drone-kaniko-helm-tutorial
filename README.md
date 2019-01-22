@@ -28,7 +28,9 @@ If you don't get the exact string you typed in, you'll get something back that's
 export GCP_PROJECT_ID=$(gcloud config list --format 'value(core.project)' 2>/dev/null)
 ```
 Before you go creating any Kubernetes clusters, it's likely that you'll need to have the API enabled. [Go ahead and do that now](https://console.cloud.google.com/apis/api/container.googleapis.com/overview) --it may prompt you to enter billing information. (just remember the $300 credit is still active if you click that button at the top)
+
 ![Google Cloud Platform: Kubernetes API page](https://raw.githubusercontent.com/dramsington-callibrity/drone-kaniko-helm-tutorial/master/screenshots/Kubernetes-API-Enable.png)
+
 Next, you'll need to [select a zone](https://cloud.google.com/compute/docs/regions-zones/#available) and create your cluster. Before we do that, it's nice to know about what context you're currently in. If you've dabbled with Kubernetes there's a decent chance your context is Minikube:
 ```shell
 kubectl config current-context
