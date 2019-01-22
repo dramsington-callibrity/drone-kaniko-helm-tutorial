@@ -1,7 +1,7 @@
 # Building containers with Drone and Kaniko
 Ever since Docker began to gain popularity a few years ago, it has been struggle to create containers inside containers themselves. The most widely used method of employing docker-in-docker has a troublesome quirk: you have to directly mount the docker unix socket to the building container which runs the risk of sending arbitrary commands to the host docker daemon. Google's solution to this problem is [Kaniko](https://github.com/GoogleContainerTools/kaniko). The [kaniko-executor](https://console.cloud.google.com/gcr/images/kaniko-project/GLOBAL/executor?gcrImageListsize=30) image is a standalone container that offers advanced features such as caching and automatically pushing the image to a registry on successful build. Best yet, it can be configured to do so without touching the host machine.
 
-The second piece of this tutorial is to take the image builder and put it in a continuous-integration pipeline. A number of tools have paved the way for this and some represent a significant investment. [Drone](https://drone.io/) is a startup friendly (read: cheap) alternative to building apps the scalable way. So let's put the two together shall we?
+The second piece of this tutorial is to take the image builder and put it in a continuous-integration pipeline. A number of tools have paved the way for this and some represent a significant investment. [Drone](https://drone.io/) is a startup friendly (read: cheap) alternative for building apps the scalable way. So let's put the two together shall we?
 
 ### Before we get started:
 You'll need to have the following accounts, and a number of Command Line tools installed:
